@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 /**
  * Есть реализация компонента, от которого требуется 2 вещи:
  *
- * 1) выводить текущее значение вертикального скролла окна (window.scrollY)
+ * 1) выводить текущее значение координаты Х мыши
  *
  * 2) после монтирования асинхронно получить число и вывести его
  *
@@ -15,20 +15,21 @@ const fetchRandomNumber = () => Promise.resolve(Math.random());
 
 export const Task1 = () => {
     const [number, setNumber] = useState();
-    const [scroll, setScroll] = useState();
+    const [mouse, setMouse] = useState();
+    const ref = useRef();
 
     useEffect(async () => {
         setNumber(await fetchRandomNumber());
 
-        window.addEventListener('scroll', () => setScroll(window.scrollY));
+        ref.current.addEventListener('mousemove', (e) => setMouse(e.clientX));
 
-        return () => window.removeEventListener('scroll', () => setScroll(window.scrollY));
+        return () => ref.current.removeEventListener('mousemove', (e) => setMouse(e.clientX));
     });
 
     return (
-        <div>
-            <div> Number: { number } </div>
-            <div> Scroll: { scroll } </div>
+        <div ref={ref} style={{ width: '100%', height: '100%' }}>
+            <div> Number: {number} </div>
+            <div> Mouse: {mouse} </div>
         </div>
-    )
-}
+    );
+};
