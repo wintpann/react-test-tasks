@@ -39,7 +39,7 @@ export class Task2 extends React.Component {
             <div>
                 <h1>Test app</h1>
                 {this.state.list.map((el, index) => (
-                    <Row data={el} index={index} onUpdate={this.handleUpdate} />
+                    <Row data={el} onUpdate={() => this.handleUpdate(index)} />
                 ))}
             </div>
         );
@@ -48,10 +48,6 @@ export class Task2 extends React.Component {
 
 class Row extends React.Component {
     renderCount = 0;
-
-    handleUpdate = () => {
-        this.props.onUpdate(this.props.index);
-    };
 
     render() {
         const {
@@ -64,7 +60,7 @@ class Row extends React.Component {
             <div>
                 <span className="label">{label}:</span>
                 <span>{value}</span> <span>({this.renderCount})</span>{' '}
-                <button className="button" onClick={this.handleUpdate}>
+                <button className="button" onClick={this.props.onUpdate}>
                     Update
                 </button>
             </div>
